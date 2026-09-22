@@ -1,5 +1,6 @@
 package com.huseynovvusal.springblogapi.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,11 +12,14 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,4 +74,12 @@ public class Blog {
   /** Number of times the blog has been viewed. */
   @Column(nullable = false)
   private long views = 0L;
+
+  /** Likes associated with this blog. Deleted together when the blog is removed. */
+  @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Likes> likes = new ArrayList<>();
+
+  /** Bookmarks associated with this blog. Deleted together when the blog is removed. */
+  @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Bookmark> bookmarks = new ArrayList<>();
 }
